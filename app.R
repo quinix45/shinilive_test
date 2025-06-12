@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(munsell)
 library(DT)
 
 ui <- fluidPage(
@@ -18,3 +19,5 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
+# shinylive::export(appdir = ".", destdir = "docs")
