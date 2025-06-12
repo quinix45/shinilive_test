@@ -31,7 +31,7 @@ library(extraDistr)
 theme_set(theme_classic(base_size = 16, 
                         base_family = 'serif'))
 
-httpuv::runStaticServer("docs")
+
 
 Model_plot_full <- function( b = 0, d = 2, sd = 1, df = 8, theta = 0, a = 1, title = ""){
     

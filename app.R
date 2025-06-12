@@ -100,4 +100,4 @@ server <- function(input, output, session) {
 # Run the Shiny app
 shinyApp(ui = ui, server = server)
 
-shinylive::export(appdir = ".", destdir = "docs")
+

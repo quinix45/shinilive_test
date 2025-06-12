@@ -3,9 +3,9 @@
     "path": "C:/Users/fabio/Dropbox/Work/Github repos/shinilive_test/app.R",
     "project_path": "app.R",
     "type": "r_source",
-    "hash": "1099572664",
+    "hash": "0",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1749763421042.0,
     "source_on_save": false,
     "relative_order": 1,
@@ -16,11 +16,11 @@
         "scrollLine": "69"
     },
     "folds": "",
-    "lastKnownWriteTime": 1749764879,
+    "lastKnownWriteTime": 1749765350,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1749765165214,
+    "last_content_update": 1749765350,
     "read_only": false,
     "read_only_alternatives": []
 }
