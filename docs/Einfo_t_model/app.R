@@ -76,7 +76,7 @@ server <- function(input, output, session) {
                                                    d = input$d, 
                                                    q = input$q, 
                                                    lb = -3, 
-                                                   ub = 3), color = "blue") +
+                                                   ub = 3), color = "#1b305c") +
       xlab("\u03b8") +
       ylab(expression(Epsilon~I*(theta))) +
       xlim(-6, 6)

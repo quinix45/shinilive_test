@@ -29,7 +29,7 @@ ui <- bslib::page_fluid(
     fluidRow(column(12, plotOutput("distPlot", height = "370px", width = "150%")))),
   
   fluidRow(
-    column(2, numericInput("Y", "Y", value = .5, min = -20, max = 20, step = 1)),
+    column(1, numericInput("Y", "Y", value = .5, min = -20, max = 20, step = 1)),
     column(1, numericInput("b", "b", value = 0, min = -10, max = 10, step = 0.25)),
     column(1, numericInput("d", "d", value = 1, min = 0.1, max = 10, step = 0.25)),
     column(1, numericInput("sigma", "sigma", value = 1, min = 0.1, max = 8, step = 0.25)),
@@ -55,7 +55,7 @@ server <- function(input, output, session) {
                                            b = input$b,
                                            d = input$d, 
                                            q = input$q), 
-                    color = "blue") +
+                    color = "#1b305c") +
       xlab("\u03b8") +
       ylab(expression(NLL*(theta))) +
       xlim(-6, 6)

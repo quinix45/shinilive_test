@@ -4,16 +4,37 @@ library(ggplot2)
 library(bslib)
 
 
-NLL <- function(df, a = 1, theta = 0, b = 0, d = 1, q = 0, Y =.5, sigma = 2) {
-  term1 <- 0.5 * df * log(df)
-  term2 <- 0.5 * (-1 - df) * log(df + (exp(2 * a * theta) * ( -b - d * q + Y)^2) / sigma^2)
-  term3 <- log(exp(-a * theta) * sigma)
-  term4 <- log(beta(df / 2, 1 / 2))
+information <- function(a, theta, df, sigma, b, d, q, lb, ub) {
   
-  result <- term1 + term2 - term3 - term4
+  # Precompute reused terms
+  sqrt_nu <- sqrt(df)
+  exp_a_theta <- exp(a * theta)
+  exp_2a_theta <- exp(2 * a * theta)
   
-  # return negative LL
-  return(-result)
+  # Define terms
+  x1 <- b - lb + d * q
+  x2 <- b + d * q - ub
+  
+  num1 <- exp_a_theta * x1
+  denom1 <- exp_2a_theta * x1^2 + df * sigma^2
+  
+  num2 <- exp_a_theta * x2
+  denom2 <- exp_2a_theta * x2^2 + df * sigma^2
+  
+  atan_term1 <- atan(num1 / (sqrt_nu * sigma))
+  atan_term2 <- atan(num2 / (sqrt_nu * sigma))
+  
+  # Final expression
+  prefactor <- a^2 * exp(-a * theta) * df * (1 + df) * sigma^2
+  
+  result <- prefactor * (
+    -num1 / denom1 + 
+      num2 / denom2 + 
+      atan_term1 / (sqrt_nu * sigma) - 
+      atan_term2 / (sqrt_nu * sigma)
+  )
+  
+  return(result)
 }
 
 
@@ -29,13 +50,12 @@ ui <- bslib::page_fluid(
     fluidRow(column(12, plotOutput("distPlot", height = "370px", width = "150%")))),
   
   fluidRow(
-    column(2, numericInput("Y", "Y", value = .5, min = -20, max = 20, step = 1)),
-    column(1, numericInput("b", "b", value = 0, min = -10, max = 10, step = 0.25)),
-    column(1, numericInput("d", "d", value = 1, min = 0.1, max = 10, step = 0.25)),
-    column(1, numericInput("sigma", "sigma", value = 1, min = 0.1, max = 8, step = 0.25)),
-    column(1, numericInput("a", "a", value = 1, min = .1, max = 4, step = 0.25)),
-    column(1, numericInput("q", "q", value = 0, min = -2, max = 2, step = 1)),
-    column(1, numericInput("df", "df", value = 5, min = 0.1, max = 200, step = 1)))
+    column(2, numericInput("b", "b", value = 0, min = -10, max = 10, step = 0.25)),
+    column(2, numericInput("d", "d", value = 1, min = 0.1, max = 10, step = 0.25)),
+    column(2, numericInput("sigma", "sigma", value = 1, min = 0.1, max = 5, step = 0.25)),
+    column(2, numericInput("a", "a", value = 1, min = -3, max = 3, step = 0.25)),
+    column(2, numericInput("q", "q", value = 0, min = -2, max = 2, step = 1)),
+    column(2, numericInput("df", "df", value = 5, min = 0.1, max = 200, step = 1)))
 )
 
 
@@ -46,31 +66,29 @@ server <- function(input, output, session) {
     # Get values from inputs
     
     
+    
     # Create the plot
     ggplot() +
-      geom_function(fun = NLL, args = list(a = input$a, 
-                                           Y = input$Y,
-                                           df = input$df, 
-                                           sigma = input$sigma, 
-                                           b = input$b,
-                                           d = input$d, 
-                                           q = input$q), 
-                    color = "blue") +
+      geom_function(fun = information, args = list(a = input$a, 
+                                                   df = input$df, 
+                                                   sigma = input$sigma, 
+                                                   b = input$b,
+                                                   d = input$d, 
+                                                   q = input$q, 
+                                                   lb = -3, 
+                                                   ub = 3), color = "#1b305c") +
       xlab("\u03b8") +
-      ylab(expression(NLL*(theta))) +
+      ylab(expression(Epsilon~I*(theta))) +
       xlim(-6, 6)
+    
     
     
     
   }, res = 100)
 }
 
-
-
-
 # Run the Shiny app
 shinyApp(ui = ui, server = server)
-
 
 # shinylive::export(appdir = ".",
 #                   destdir = "docs/")
