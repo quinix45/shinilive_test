@@ -78,7 +78,7 @@ server <- function(input, output, session) {
     colnames(rand_sample) <- "X"
     
     ggplot(rand_sample, aes(x = X)) +
-      xlab(paste("Distribution of Means for \n", nrow(rand_sample), "Experiments")) +
+      xlab(paste("Means for", nrow(rand_sample), "Experiments")) +
       scale_y_continuous(expand = c(0,0)) +
       geom_histogram(color = "black",
                      linewidth = .8,
@@ -92,8 +92,7 @@ server <- function(input, output, session) {
       theme( axis.text.y=element_blank(),
              axis.ticks.y=element_blank(),
              axis.line.y = element_blank(),
-             axis.title.y = element_blank(),
-             axis.title.x = element_text(size = 12))
+             axis.title.y = element_blank())
     
     
   }, res = 100)
